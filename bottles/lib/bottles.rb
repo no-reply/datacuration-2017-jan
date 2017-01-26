@@ -8,7 +8,7 @@
 #   Bottles.new.verses(99, 22)
 #
 # @example singing a single verse
-#   Bottles.new.verses(22)
+#   Bottles.new.verse(22)
 #
 # @see https://en.wikipedia.org/wiki/99_Bottles_of_Beer
 class Bottles
@@ -64,7 +64,10 @@ class Bottles
   # @param number [Integer]
   # @return [String]
   def verse(number)
-    "#{quantity(number: number).capitalize} #{container(number: number)} of beer on the wall, #{quantity(number: number)} #{container(number: number)} of beer.\n#{action(number: number)}, #{quantity(number: successor(number: number))} #{container(number: successor(number: number))} of beer on the wall.\n"
+    "#{quantity(number: number).capitalize} #{container(number: number)} of beer on the wall, " \
+    "#{quantity(number: number)} #{container(number: number)} of beer.\n" \
+    "#{action(number: number)}, "\
+    "#{quantity(number: successor(number: number))} #{container(number: successor(number: number))} of beer on the wall.\n"
   end
 
   ##
