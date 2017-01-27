@@ -12,23 +12,6 @@
 #
 # @see https://en.wikipedia.org/wiki/99_Bottles_of_Beer
 class Bottles
-  
-  ##
-  # Factory for bottle numbers.
-  #
-  # @param number [Integer]
-  # @return [BottleNumber]
-  def bottle_number_for(number)
-    case number
-    when 0
-      BottleNumber0
-    when 1
-      BottleNumber1
-    else
-      BottleNumber
-    end.new(number)
-  end
-
   ##
   # Sings the song.
   #
@@ -38,18 +21,19 @@ class Bottles
   end
 
   ##
+  # Gives the verse by number.
+  #
   # @param number [Integer]
-  # @return [String]
+  # @return [String] the verse
   #
   # @todo fix this garbage
   def verse(number)
-    bottle_number      = bottle_number_for(number)
-    next_bottle_number = bottle_number_for(bottle_number.successor)
+    bottle_number = BottleNumber.for(number: number)
 
     "#{bottle_number} of beer on the wall, ".capitalize +
     "#{bottle_number} of beer.\n" \
     "#{bottle_number.action}, "\
-    "#{next_bottle_number} of beer on the wall.\n"
+    "#{bottle_number.successor} of beer on the wall.\n"
   end
 
   ##
@@ -57,7 +41,7 @@ class Bottles
   #
   # @param upper [Integer] the verse to begin with
   # @param lower [Integer] the verse to end on
-  # @return [String]
+  # @return [String] the verses
   def verses(upper, lower)
     upper.downto(lower)
       .map { |i| verse(i) }
@@ -68,8 +52,12 @@ end
 ##
 # A number of "bottles" in a _99 Bottles_-like song.
 #
-# @example
-#   bottle_num = BottleNumber.new(99)
+# @example using the bottle number factory
+#   bottle_1  = BottleNumber.for(number: 1)
+#   bottle_99 = BottleNumber.for(number: 99)
+#
+# @example working with bottle numbers
+#   bottle_num = BottleNumber.for(number: 99)
 #
 #   bottle_num.container # => 'bottles'
 #   bottle_num.pronoun   # => 'one'
@@ -88,6 +76,22 @@ class BottleNumber
   # @param number [Integer]
   def initialize(number)
     @number = number
+  end
+
+  ##
+  # @param number [Integer]
+  # @return [BottleNumber] a BottleNumber instance for the number given
+  def self.for(number: )
+    case number
+    when 0
+      BottleNumber0
+    when 1
+      BottleNumber1
+    when 6
+      BottleNumber6
+    else
+      self
+    end.new(number)    
   end
 
   ##
@@ -111,7 +115,7 @@ class BottleNumber
   ##
   # @return [String]
   def quantity
-    number.to_s
+    number
   end
 
   ##
@@ -124,7 +128,7 @@ class BottleNumber
   #
   # @return [Integer] the number for next bottle
   def successor
-    number-1
+    BottleNumber.for(number: number - 1)
   end
   alias :succ :successor
 
@@ -133,7 +137,7 @@ class BottleNumber
   #
   # @see Integer#to_int
   def to_int
-    number
+    number.to_int
   end
 
   ##
@@ -164,7 +168,7 @@ class BottleNumber0 < BottleNumber
   ##
   # @see BottleNumber#successor
   def successor
-    99
+    BottleNumber.for(number: 99)
   end
   alias :succ :successor
 end
